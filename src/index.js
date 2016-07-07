@@ -8,10 +8,16 @@ import { makeRoutes } from './routes';
 mongoose.Promise = Promise;
 
 initializeDatabase();
-
+let publicPath = path.join(__dirname, '..', 'public');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(publicPath));
+
 app.use('/api', makeRoutes());
+
+app.use('/', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 export default app;
