@@ -1,0 +1,42 @@
+{
+  "name": "timesheets",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "gulp build",
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninja4826/timesheets.git"
+  },
+  "keywords": [],
+  "author": "Russell Hueske <hueske.russ690@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ninja4826/timesheets/issues"
+  },
+  "homepage": "https://github.com/ninja4826/timesheets#readme",
+  "description": "",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-tslint": "^5.0.0",
+    "gulp-typescript": "^2.13.6",
+    "tslint": "^3.12.1",
+    "typescript": "^1.8.10",
+    "typings": "^1.3.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "config": "^1.21.0",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "mongoose": "^4.5.2",
+    "mongoose-long": "^0.1.0"
+  }
+}
