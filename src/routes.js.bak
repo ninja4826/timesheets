@@ -1,0 +1,108 @@
+import { Router } from 'express';
+import { Month, Entry } from './models';
+
+export function makeRoutes() {
+  let router = Router();
+  
+  router.get('/find/:month_num/:year_num', (req, res) => {
+    Month.findOne({
+      num: req.params.month_num,
+      year: req.params.year_num
+    }).populate('entries').catch((err) => res.json({ err }))
+      .then((month) => {
+        if (month && month.entries) {
+          res.json(month.entries.map((entry) => entry.toObject()));
+        } else {
+          res.json({ success: false });
+        }
+      });
+  });
+  
+  router.post('/add', (req, res) => {
+    console.log('body:', req.body);
+    
+    if (!req.body.type || !req.body.data) {
+      return res.json({ err: "Type is missing." });
+    }
+    let data = req.body.data;
+    if (req.body.type === 'update') {
+      // Entry.findOne({ day: new Date(data.day * 1000) })
+      Entry.findOne({ day: new Date(data.day) })
+        .catch((err) => res.json({ err }))
+        .then((entry) => {
+          console.log('found entry:', entry);
+          
+          let setupEntry = (ent) => {
+            if (data.in_time) {
+              // ent.in_time = new Date(data.in_time * 1000);
+              ent.in_time = new Date(data.in_time);
+            }
+            if (data.out_time) {
+              // ent.out_time = new Date(data.out_time * 1000);
+              ent.out_time = new Date(data.out_time);
+            }
+            if (data.lunch_start) {
+              // ent.lunch_start = new Date(data.lunch_start * 1000);
+              ent.lunch_start = new Date(data.lunch_start);
+            }
+            if (data.lunch_end) {
+              // ent.lunch_end = new Date(data.lunch_end * 1000);
+              ent.lunch_end = new Date(data.lunch_end);
+            }
+            return ent;
+          };
+          
+          if (entry) {
+            entry = setupEntry(entry);
+            entry.save()
+              .catch((err) => res.json({ err }))
+              .then((_entry) => {
+                console.log('entry has been updated:', _entry);
+                res.json({ success: true, data: _entry });
+              });
+          } else {
+            entry = setupEntry(new Entry({
+              // day: new Date(data.day * 1000)
+              day: new Date(data.day)
+            }));
+            entry.save()
+              .catch((err) => res.json({ err }))
+              .then((_entry) => {
+                console.log('entry has been created:', _entry);
+                res.json({ success: true, data: _entry });
+              });
+          }
+        });
+    } else if (req.body.type === 'deletion') {
+      // Entry.findOne({ day: new Date(data.day * 1000) })
+      Entry.findOne({ day: new Date(data.day) })
+        .catch((err) => res.json({ err }))
+        .then((entry) => {
+          console.log('entry:', entry);
+          if (entry) {
+            for (let field of data.fields) {
+              entry[field] = undefined;
+            }
+            console.log('new entry:', entry);
+            // res.json({ success: true, data: entry });
+            entry.save()
+              .catch((err) => res.json({ err }))
+              .then((_entry) => {
+                console.log('saved entry:');
+                res.json({ success: true, data: _entry });
+              });
+          } else {
+            res.json({ err: "This entry does not exist." });
+          }
+        });
+    }
+  });
+  
+  router.get('/test', (req, res) => {
+    // console.log(req.query);
+    console.log(JSON.parse(req.query.blah));
+    res.json(JSON.parse(req.query.blah));
+  });
+  
+  return router;
+}

@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import { initializeDatabase } from './models';
 import { makeRoutes } from './routes';
+// import { makeRoutes } from './__routes';
 
 mongoose.Promise = Promise;
 

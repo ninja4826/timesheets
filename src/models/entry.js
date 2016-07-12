@@ -115,12 +115,17 @@ entrySchema.post('save', (doc, next) => {
 
 entrySchema.options.toObject = {
   transform: (doc, ret, opts) => {
-    ret['day'] = doc.day.getTime() / 1000;
-    if (doc.in_time) ret['in_time'] = doc.in_time.getTime() / 1000;
-    if (doc.out_time) ret['out_time'] = doc.out_time.getTime() / 1000;
-    if (doc.lunch_start) ret['lunch_start'] = doc.lunch_start.getTime() / 1000;
-    if (doc.lunch_end) ret['lunch_end'] = doc.lunch_end.getTime() / 1000;
-    
+    // ret['day'] = doc.day.getTime() / 1000;
+    ret['day'] = doc.day.getTime();
+    // if (doc.in_time) ret['in_time'] = doc.in_time.getTime() / 1000;
+    if (doc.in_time) ret['in_time'] = doc.in_time.getTime();
+    // if (doc.out_time) ret['out_time'] = doc.out_time.getTime() / 1000;
+    if (doc.out_time) ret['out_time'] = doc.out_time.getTime();
+    // if (doc.lunch_start) ret['lunch_start'] = doc.lunch_start.getTime() / 1000;
+    if (doc.lunch_start) ret['lunch_start'] = doc.lunch_start.getTime();
+    // if (doc.lunch_end) ret['lunch_end'] = doc.lunch_end.getTime() / 1000;
+    if (doc.lunch_end) ret['lunch_end'] = doc.lunch_end.getTime();
+    delete ret.__v;
     return ret;
   }
 };
