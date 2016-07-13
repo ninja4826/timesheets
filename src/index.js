@@ -9,7 +9,7 @@ import { makeRoutes } from './routes';
 mongoose.Promise = Promise;
 
 initializeDatabase();
-let publicPath = path.join(__dirname, '..', 'public');
+let publicPath = path.join(__dirname, '..', 'public', 'dist');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
